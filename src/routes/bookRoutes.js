@@ -4,6 +4,7 @@ import {
   deleteBook,
   favoriteBook,
   getAllBooks,
+  getBookById,
   getFavoriteBooks,
   recommendedBooks,
   updateBook,
@@ -18,5 +19,5 @@ router.delete("/:id", deleteBook);
 router.patch("/:id/favorite", favoriteBook);
 router.get('/recommended', recommendedBooks);
 router.get('/favorite', getFavoriteBooks)
-
+router.get('/:id', getBookById)
 export default router;

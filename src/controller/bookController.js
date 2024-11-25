@@ -29,7 +29,7 @@ export const updateBook = async (req, res) => {
       runValidators: true,
     });
     if (!updatedBook) return res.status(404).json("Book not found");
-    res.status(201).json("book updated");
+    res.status(200).json(updatedBook);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
