@@ -5,7 +5,7 @@ export const getAllBooks = async (req, res) => {
     const books = await Book.find();
     res.status(200).json(books);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch books" });
+    res.status(500).json({ error:  error.message });
   }
 };
 
