@@ -14,7 +14,7 @@ export const createBook = async (req, res) => {
     const newBook = new Book(req.body);
     const savedBook = await newBook.save();
 
-    res.status(200).json(savedBook);
+    res.status(201).json(savedBook);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -90,6 +90,5 @@ export const recommendedBooks = async (req, res) => {
     res.status(200).json(randomBook);
   } catch (error) {
     res.status(500).json({ error: error.message });
-
   }
 }

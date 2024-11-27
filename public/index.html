@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Books API Documentation</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    code { background: #f4f4f4; padding: 3px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Books collection API</h1>
+  <p>This API allows you to manage a collection of books with features like CRUD operations, favoriting, and recommendations.</p>
+
+  <h2>Base URL</h2>
+  <code>https://book-collection-api-one.vercel.app/</code>
+
+  <h2>Endpoints</h2>
+  <ul>
+    <li><code>GET /books</code>: Fetch all books</li>
+    <li><code>POST /books</code>: Add a new book</li>
+    <li><code>PUT /books/:id</code>: Update a book</li>
+    <li><code>DELETE /books/:id</code>: Delete a book</li>
+    <li><code>PATCH /books/:id/favorite</code>: Toggle favorite status</li>
+    <li><code>GET /books/recommended</code>: Get a recommended book</li>
+  </ul>
+</body>
+</html>
