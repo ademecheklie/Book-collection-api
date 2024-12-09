@@ -10,8 +10,15 @@ export const getAllBooks = async (req, res) => {
 };
 
 export const createBook = async (req, res) => {
+  const { title, author, isbn, publishedYear } = req.body;
   try {
-    const newBook = new Book(req.body);
+    const newBook = new Book({
+      title,
+      author,
+      isbn,
+      publishedYear,
+      createdBy: req.user.id,
+    });
     const savedBook = await newBook.save();
 
     res.status(201).json(savedBook);
@@ -21,26 +28,42 @@ export const createBook = async (req, res) => {
 };
 
 export const updateBook = async (req, res) => {
+  const { id } = req.params;
+  const { title, author, isbn, publishedYear, isFavorite } = req.body;
   try {
-    const { id } = req.params;
-    console.log(id);
-    const updatedBook = await Book.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!updatedBook) return res.status(404).json("Book not found");
-    res.status(200).json(updatedBook);
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    if (book.createdBy.toString() !== req.user.id) {
+      return res.status(403).json({ message: "You don't have permission to update this book" });
+    }
+
+    book.title = title || book.title;
+    book.author = author || book.author;
+    book.isbn = isbn || book.isbn;
+    book.publishedYear = publishedYear || book.publishedYear;
+    book.isFavorite = isFavorite !== undefined ? isFavorite : book.isFavorite;
+
+    await book.save();
+    res.status(200).json(book);
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
-};
+  }}
 
 export const deleteBook = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedBook = await Book.findByIdAndDelete(id);
-    if (!deletedBook) return res.status(404).json("Book not found");
-    res.status(200).json("Book deleted successfully");
+    const book = await Book.findById(id);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    if (book.createdBy.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "You don't have permission to delete this book" });
+    }
+await book.deleteOne();
+    res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -53,7 +76,7 @@ export const favoriteBook = async (req, res) => {
     if (!book) return res.status(404).json("Book not found");
     book.isFavorite = !book.isFavorite;
     await book.save();
-    res.status(200).json("Favorite updated");
+    res.status(200).json("Favorite status updated");
   }
   catch (error) {
     res.status(500).json({ error: error.message });
@@ -92,3 +115,12 @@ export const recommendedBooks = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }
+
+export const getBooks = async (req, res) => {
+  try {
+    const books = await Book.find({ _id: { $in: req.user.favorites } }).populate("createdBy", "name username");
+    res.status(200).json(books);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

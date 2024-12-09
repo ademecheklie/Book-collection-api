@@ -4,6 +4,9 @@ import connectToDB from "./config/db.js";
 import bookRoutes from "./routes/bookRoutes.js";
 import dotenv from "dotenv";
 import path from "path";
+import authRoutes from "./routes/authRoutes.js";
+import swaggerDocs from './config/swagger.js';
+import { verifyToken } from "./middleware/middleware.js";
 
 const app = express();
 dotenv.config();
@@ -13,7 +16,12 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => {
     res.sendFile(path.resolve('./public/index.html'));
 });
-app.use("/books", bookRoutes);
+app.use("/auth", authRoutes);
+app.use("/books",verifyToken, bookRoutes);
+
+swaggerDocs(app);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
