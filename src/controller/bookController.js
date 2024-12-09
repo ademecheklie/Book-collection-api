@@ -118,9 +118,14 @@ export const recommendedBooks = async (req, res) => {
 
 export const getBooks = async (req, res) => {
   try {
-    const books = await Book.find({ _id: { $in: req.user.favorites } }).populate("createdBy", "name username");
-    res.status(200).json(books);
+    if (!req.user || !req.user.favorites) {
+      return res.status(400).json({ message: "User information is missing or invalid." });
+    }
+    const favoriteBooks = await Book.find({ _id: { $in: req.user.favorites } })
+      .populate("createdBy", "name username");
+
+    res.status(200).json(favoriteBooks);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "An error occurred while retrieving favorite books.", details: error.message });
   }
 };

@@ -22,8 +22,8 @@ const options = {
       security: [{ bearerAuth: [] }],
       servers: [
           {
-              url: 'http://localhost:5000',
-              description: 'Development server',
+              url: 'https://book-collection-api-one.vercel.app',
+              description: 'Production server',
           },
       ],
   },
