@@ -19,17 +19,8 @@ app.get('/', (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/books",verifyToken, bookRoutes);
 
-swaggerDocs(app);
-app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec, {
-      swaggerOptions: {
-        url: '/swagger.json', // Ensure it fetches the correct JSON
-      },
-    })
-  );
-  
+swaggerDocs(app); 
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
