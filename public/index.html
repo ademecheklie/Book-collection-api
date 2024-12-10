@@ -23,34 +23,50 @@
 
   <h2>Swagger Documentation</h2>
   <p>Access the interactive API documentation:</p>
-  <ul>
-    <li><a href="https://book-collection-api-one.vercel.app//api-docs" target="_blank">Swagger UI</a></li>
-    <li><a href="https://book-collection-api-one.vercel.app/swagger.json" target="_blank">Swagger JSON</a></li>
-  </ul>
+  <p><a href="/api-docs">Swagger UI</a></p>
 
   <h2>Endpoints</h2>
+  <h3>Authentication</h3>
   <ul>
-    <li><code>GET /books/all</code>: Fetch all books</li>
-    <li><code>POST /books</code>: Add a new book</li>
-    <li><code>PUT /books/:id</code>: Update a book</li>
-    <li><code>DELETE /books/:id</code>: Delete a book</li>
-    <li><code>PATCH /books/:id/favorite</code>: Toggle the favorite status of a book</li>
-    <li><code>GET /books/recommended</code>: Get a recommended book</li>
-    <li><code>GET /books/favorites</code>: Get all books marked as favorites by the user</li>
+    <li><code>POST /auth/signup</code> - Sign up a new user</li>
+    <li><code>POST /auth/login</code> - Log in a user</li>
   </ul>
 
-  <h2>Authentication</h2>
-  <p>This API uses JWT-based authentication. Include your token in the <code>Authorization</code> header as a Bearer token for protected routes:</p>
-  <pre>
-  Authorization: Bearer &lt;your-token&gt;
-  </pre>
-
-  <h2>Features</h2>
+  <h3>Books</h3>
   <ul>
-    <li>Secure API with JWT authentication</li>
-    <li>CRUD operations for managing books</li>
-    <li>Personalized recommendations</li>
-    <li>Track favorite books</li>
+    <li><code>GET /books</code> - Get all books (requires authentication)</li>
+    <li><code>POST /books</code> - Create a new book (requires authentication and user role)</li>
+    <li><code>PUT /books/:id</code> - Update a book by ID (requires authentication and user role)</li>
+    <li><code>DELETE /books/:id</code> - Delete a book by ID (requires authentication and user/admin role)</li>
+    <li><code>PATCH /books/:id/favorite</code> - Toggle favorite status of a book (requires authentication and user role)</li>
+    <li><code>GET /books/recommended</code> - Get a recommended book (requires authentication)</li>
+    <li><code>GET /books/favorite</code> - Get all favorite books (requires authentication)</li>
+    <li><code>GET /books/:id</code> - Get a book by ID (requires authentication)</li>
   </ul>
+
+  <h2>Models</h2>
+  <h3>User</h3>
+  <ul>
+    <li><code>id</code> - The auto-generated ID of the user</li>
+    <li><code>name</code> - The name of the user</li>
+    <li><code>username</code> - The username of the user</li>
+    <li><code>email</code> - The email of the user</li>
+    <li><code>password</code> - The password of the user</li>
+    <li><code>role</code> - The role of the user (admin/user)</li>
+  </ul>
+
+  <h3>Book</h3>
+  <ul>
+    <li><code>id</code> - The auto-generated ID of the book</li>
+    <li><code>title</code> - The title of the book</li>
+    <li><code>author</code> - The author of the book</li>
+    <li><code>isbn</code> - The ISBN of the book</li>
+    <li><code>publishedYear</code> - The published year of the book</li>
+    <li><code>createdBy</code> - The ID of the user who created the book</li>
+    <li><code>isFavorite</code> - The favorite status of the book</li>
+  </ul>
+
+  <h2>Security</h2>
+  <p>This API uses JWT for authentication. Include the token in the <code>Authorization</code> header as <code>Bearer &lt;token&gt;</code>.</p>
 </body>
 </html>
