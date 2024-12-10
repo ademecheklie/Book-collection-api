@@ -30,9 +30,9 @@ const options = {
   apis: ['src/routes/*.js'], 
 };
 
-const swaggerSpec = swaggerJsdoc(options);
+export const swaggerSpec = swaggerJsdoc(options);
 
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.1/swagger-ui.min.css";
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.3.0/swagger-ui.min.css";
 
 const swaggerDocs = (app) => {
   app.get('/swagger.json', (req, res) => {
@@ -40,7 +40,7 @@ const swaggerDocs = (app) => {
     res.send(swaggerSpec);
   });
 
-  // Route to serve Swagger UI
+
   app.use(
     '/api-docs',
     swaggerUi.serve,
