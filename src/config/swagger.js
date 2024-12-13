@@ -23,7 +23,7 @@ const options = {
     servers: [
       {
         url: 'https://book-collection-api-one.vercel.app/', 
-        description: 'Development server',
+        description: 'test Development server',
       },
     ],
   },
@@ -31,8 +31,6 @@ const options = {
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
-
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css";
 
 const swaggerDocs = (app) => {
   app.get('/swagger.json', (req, res) => {
@@ -44,9 +42,7 @@ const swaggerDocs = (app) => {
   app.use(
     '/api-docs',
     swaggerUi.serve,
-    swaggerUi.setup(swaggerSpec, {
-      customCssUrl: CSS_URL, 
-    },)
+    swaggerUi.setup(swaggerSpec,)
   );
 
   console.log('Swagger docs available at /api-docs');

@@ -5,8 +5,7 @@ import {
   favoriteBook,
   getAllBooks,
   getBookById,
-  getBooks,
-  getFavoriteBooks,
+  getUserFavoriteBooks,
   recommendedBooks,
   updateBook,
 } from "../controller/bookController.js";
@@ -18,10 +17,9 @@ router.get("/all", authorizeRoles("admin"), getAllBooks);
 router.post("/", authorizeRoles("user"), createBook);
 router.put("/:id", authorizeRoles("user"), updateBook);
 router.delete("/:id", deleteBook);
+router.get("/",  authorizeRoles("user"),getUserFavoriteBooks);
 router.patch("/:id/favorite", authorizeRoles("user"), favoriteBook);
 router.get("/recommended", recommendedBooks);
-router.get("/favorite", verifyToken, getFavoriteBooks);
-router.get("/", getBooks);
 router.get("/:id", getBookById);
 
 /**
@@ -180,27 +178,6 @@ router.get("/:id", getBookById);
  *               $ref: '#/components/schemas/Book'
  *       404:
  *         description: No books available
- *       500:
- *         description: Internal server error
- */
-
-/**
- * @swagger
- * /books/favorite:
- *   get:
- *     summary: Get all favorite books
- *     tags: [Books]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Successfully retrieved favorite books
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Book'
  *       500:
  *         description: Internal server error
  */

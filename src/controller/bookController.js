@@ -1,4 +1,6 @@
 import Book from "../model/book.js";
+import User from "../model/user.js";
+import mongoose from "mongoose";
 
 export const getAllBooks = async (req, res) => {
   try {
@@ -59,7 +61,7 @@ export const deleteBook = async (req, res) => {
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
-    if (book.createdBy.toString() !== req.user.id && req.user.role !== "admin") {
+    if (book.createdBy.toString() !== req.user.id) {
       return res.status(403).json({ message: "You don't have permission to delete this book" });
     }
 await book.deleteOne();
@@ -71,14 +73,28 @@ await book.deleteOne();
 
 export const favoriteBook = async (req, res) => {
   const { id } = req.params;
+  const userId = req.user.id; 
   try {
     const book = await Book.findById(id);
-    if (!book) return res.status(404).json("Book not found");
-    book.isFavorite = !book.isFavorite;
-    await book.save();
-    res.status(200).json("Favorite status updated");
-  }
-  catch (error) {
+    if (!book) return res.status(404).json({ message: "Book not found" });
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isFavorite = user.favorites.includes(id);
+
+    if (isFavorite) {
+      user.favorites = user.favorites.filter((bookId) => bookId.toString() !== id);
+    } else {
+      user.favorites.push(id);
+    }
+    await user.save();
+    res.status(200).json({
+      message: isFavorite
+        ? "Book removed from favorites"
+        : "Book added to favorites",
+      favorites: user.favorites,
+    });
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
@@ -95,16 +111,6 @@ export const getBookById = async (req, res) => {
   } 
 }
 
-export const getFavoriteBooks = async (req, res) => {
-  try {
-    const books = await Book.find({ isFavorite: true });
-    res.status(200).json(books);
-  }
-  catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
 export const recommendedBooks = async (req, res) => {
   try {
     const books = await Book.find();
@@ -116,16 +122,22 @@ export const recommendedBooks = async (req, res) => {
   }
 }
 
-export const getBooks = async (req, res) => {
+export const getUserFavoriteBooks = async (req, res) => {
+
   try {
-    if (!req.user || !req.user.favorites) {
-      return res.status(400).json({ message: "User information is missing or invalid." });
+    if (!req.user || !Array.isArray(req.user.favorites) || req.user.favorites.length === 0) {
+      return res.status(400).json({ message: "No favorites found." });
     }
-    const favoriteBooks = await Book.find({ _id: { $in: req.user.favorites } })
-      .populate("createdBy", "name username");
+    const favoriteBookIds = req.user.favorites.map(id =>new mongoose.Types.ObjectId(id));
+    const favoriteBooks = await Book.find({
+      _id: { $in: favoriteBookIds }
+    }).populate("createdBy", "name username");
 
     res.status(200).json(favoriteBooks);
   } catch (error) {
-    res.status(500).json({ error: "An error occurred while retrieving favorite books.", details: error.message });
+    res.status(500).json({
+      error: "An error occurred while retrieving favorite books.",
+      details: error.message,
+    });
   }
 };

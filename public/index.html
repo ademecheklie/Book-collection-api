@@ -22,7 +22,7 @@
   <p><code>https://book-collection-api-one.vercel.app/</code></p>
 
   <h2>Swagger Documentation</h2>
-  <p>Access the interactive API documentation:</p>
+  <p>Access and test API documentation:</p>
   <p><a href="/api-docs">Swagger UI</a></p>
 
   <h2>Endpoints</h2>
@@ -34,13 +34,13 @@
 
   <h3>Books</h3>
   <ul>
-    <li><code>GET /books</code> - Get all books (requires authentication)</li>
+    <li><code>GET /books/all</code> - Get all books (requires authentication and admin role)</li>
     <li><code>POST /books</code> - Create a new book (requires authentication and user role)</li>
     <li><code>PUT /books/:id</code> - Update a book by ID (requires authentication and user role)</li>
     <li><code>DELETE /books/:id</code> - Delete a book by ID (requires authentication and user/admin role)</li>
     <li><code>PATCH /books/:id/favorite</code> - Toggle favorite status of a book (requires authentication and user role)</li>
     <li><code>GET /books/recommended</code> - Get a recommended book (requires authentication)</li>
-    <li><code>GET /books/favorite</code> - Get all favorite books (requires authentication)</li>
+    <li><code>GET /books</code> - Get all favorite books user marks as favorite (requires authentication and user role)</li>
     <li><code>GET /books/:id</code> - Get a book by ID (requires authentication)</li>
   </ul>
 
@@ -52,7 +52,7 @@
     <li><code>username</code> - The username of the user</li>
     <li><code>email</code> - The email of the user</li>
     <li><code>password</code> - The password of the user</li>
-    <li><code>role</code> - The role of the user (admin/user)</li>
+    <li><code>role</code> - The role of the user (admin/user) default is user</li>
   </ul>
 
   <h3>Book</h3>
@@ -67,6 +67,6 @@
   </ul>
 
   <h2>Security</h2>
-  <p>This API uses JWT for authentication. Include the token in the <code>Authorization</code> header as <code>Bearer &lt;token&gt;</code>.</p>
+  <p>This API uses JWT for authentication. Include the token in the <code>Authorization</code> header as <code> token</code>.</p>
 </body>
 </html>
